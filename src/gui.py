@@ -150,38 +150,38 @@ def ui_show_debug():
 def ui_fix_text():
 	st.checkbox('fix common PDF problems', value=True, key='fix_text')
 
-# def ui_temperature():
-# 	#st.slider('temperature', 0.0, 1.0, 0.0, 0.1, key='temperature', format='%0.1f')
-# 	ss['temperature'] = 0.0
+def ui_temperature():
+	#st.slider('temperature', 0.0, 1.0, 0.0, 0.1, key='temperature', format='%0.1f')
+	ss['temperature'] = 0.0
 
-# def ui_fragments():
-# 	#st.number_input('fragment size', 0,2000,200, step=100, key='frag_size')
-# 	st.selectbox('fragment size (characters)', [0,200,300,400,500,600,700,800,900,1000], index=3, key='frag_size')
-# 	b_reindex()
-# 	st.number_input('max fragments', 1, 10, 4, key='max_frags')
-# 	st.number_input('fragments before', 0, 3, 1, key='n_frag_before') # TODO: pass to model
-# 	st.number_input('fragments after',  0, 3, 1, key='n_frag_after')  # TODO: pass to model
+def ui_fragments():
+	#st.number_input('fragment size', 0,2000,200, step=100, key='frag_size')
+	st.selectbox('fragment size (characters)', [0,200,300,400,500,600,700,800,900,1000], index=3, key='frag_size')
+	b_reindex()
+	st.number_input('max fragments', 1, 10, 4, key='max_frags')
+	st.number_input('fragments before', 0, 3, 1, key='n_frag_before') # TODO: pass to model
+	st.number_input('fragments after',  0, 3, 1, key='n_frag_after')  # TODO: pass to model
 
-# def ui_model():
-# 	models = ['gpt-3.5-turbo','gpt-4','text-davinci-003','text-curie-001']
-# 	st.selectbox('main model', models, key='model', disabled=not ss.get('api_key'))
-# 	st.selectbox('embedding model', ['text-embedding-ada-002'], key='model_embed') # FOR FUTURE USE
+def ui_model():
+	models = ['gpt-3.5-turbo','gpt-4','text-davinci-003','text-curie-001']
+	st.selectbox('main model', models, key='model', disabled=not ss.get('api_key'))
+	st.selectbox('embedding model', ['text-embedding-ada-002'], key='model_embed') # FOR FUTURE USE
 
-# def ui_hyde():
-# 	st.checkbox('use HyDE', value=True, key='use_hyde')
+def ui_hyde():
+	st.checkbox('use HyDE', value=True, key='use_hyde')
 
-# def ui_hyde_summary():
-# 	st.checkbox('use summary in HyDE', value=True, key='use_hyde_summary')
+def ui_hyde_summary():
+	st.checkbox('use summary in HyDE', value=True, key='use_hyde_summary')
 
-# def ui_task_template():
-# 	st.selectbox('task prompt template', prompts.TASK.keys(), key='task_name')
+def ui_task_template():
+	st.selectbox('task prompt template', prompts.TASK.keys(), key='task_name')
 
-# def ui_task():
-# 	x = ss['task_name']
-# 	st.text_area('task prompt', prompts.TASK[x], key='task')
+def ui_task():
+	x = ss['task_name']
+	st.text_area('task prompt', prompts.TASK[x], key='task')
 
-# def ui_hyde_prompt():
-# 	st.text_area('HyDE prompt', prompts.HYDE, key='hyde_prompt')
+def ui_hyde_prompt():
+	st.text_area('HyDE prompt', prompts.HYDE, key='hyde_prompt')
 
 def ui_question():
 	st.write('## 3. Ask questions'+(f' to {ss["filename"]}' if ss.get('filename') else ''))
