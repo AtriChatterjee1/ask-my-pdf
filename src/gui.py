@@ -144,11 +144,11 @@ def ui_pdf_file():
 		b_delete()
 		ss['spin_select_file'] = st.empty()
 
-# def ui_show_debug():
-# 	st.checkbox('show debug section', key='show_debug')
+def ui_show_debug():
+	st.checkbox('show debug section', key='show_debug')
 
-# def ui_fix_text():
-# 	st.checkbox('fix common PDF problems', value=True, key='fix_text')
+def ui_fix_text():
+	st.checkbox('fix common PDF problems', value=True, key='fix_text')
 
 # def ui_temperature():
 # 	#st.slider('temperature', 0.0, 1.0, 0.0, 0.1, key='temperature', format='%0.1f')
