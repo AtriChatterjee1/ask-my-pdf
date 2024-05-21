@@ -5,7 +5,7 @@ app_name = "Ask my PDF"
 # BOILERPLATE
 
 import streamlit as st
-st.set_page_config(layout='centered', page_title=f'{app_name} {__version__}')
+st.set_page_config(layout='centered', page_title=f'{app_name}')
 ss = st.session_state
 if 'debug' not in ss: ss['debug'] = {}
 import css
@@ -61,22 +61,18 @@ def ui_spacer(n=2, line=False, next_n=0):
 def ui_info():
 	st.markdown(f"""
 	# Ask my PDF
-	version {__version__}
 	
-	Question answering system built on top of GPT3.
+	Question answering system .
 	""")
 	ui_spacer(1)
-	st.write("Made by [Maciej Obarski](https://www.linkedin.com/in/mobarski/).", unsafe_allow_html=True)
-	ui_spacer(1)
+	
 	st.markdown("""
 		Thank you for your interest in my application.
 		Please be aware that this is only a Proof of Concept system
 		and may contain bugs or unfinished features.
-		If you like this app you can ❤️ [follow me](https://twitter.com/KerbalFPV)
-		on Twitter for news and updates.
 		""")
 	ui_spacer(1)
-	st.markdown('Source code can be found [here](https://github.com/mobarski/ask-my-pdf).')
+	st.markdown('Source code can be found [here](hhttps://github.com/AtriChatterjee1/ask-my-pdf).')
 
 def ui_api_key():
 	if ss['community_user']:
@@ -106,86 +102,86 @@ def index_pdf_file():
 				debug_index()
 				ss['filename_done'] = ss['filename'] # UGLY
 
-def debug_index():
-	index = ss['index']
-	d = {}
-	d['hash'] = index['hash']
-	d['frag_size'] = index['frag_size']
-	d['n_pages'] = len(index['pages'])
-	d['n_texts'] = len(index['texts'])
-	d['summary'] = index['summary']
-	d['pages'] = index['pages']
-	d['texts'] = index['texts']
-	d['time'] = index.get('time',{})
-	ss['debug']['index'] = d
+# def debug_index():
+# 	index = ss['index']
+# 	d = {}
+# 	d['hash'] = index['hash']
+# 	d['frag_size'] = index['frag_size']
+# 	d['n_pages'] = len(index['pages'])
+# 	d['n_texts'] = len(index['texts'])
+# 	d['summary'] = index['summary']
+# 	d['pages'] = index['pages']
+# 	d['texts'] = index['texts']
+# 	d['time'] = index.get('time',{})
+# 	ss['debug']['index'] = d
 
-def ui_pdf_file():
-	st.write('## 2. Upload or select your PDF file')
-	disabled = not ss.get('user') or (not ss.get('api_key') and not ss.get('community_pct',0))
-	t1,t2 = st.tabs(['UPLOAD','SELECT'])
-	with t1:
-		st.file_uploader('pdf file', type='pdf', key='pdf_file', disabled=disabled, on_change=index_pdf_file, label_visibility="collapsed")
-		b_save()
-	with t2:
-		filenames = ['']
-		if ss.get('storage'):
-			filenames += ss['storage'].list()
-		def on_change():
-			name = ss['selected_file']
-			if name and ss.get('storage'):
-				with ss['spin_select_file']:
-					with st.spinner('loading index'):
-						t0 = now()
-						index = ss['storage'].get(name)
-						ss['debug']['storage_get_time'] = now()-t0
-				ss['filename'] = name # XXX
-				ss['index'] = index
-				debug_index()
-			else:
-				#ss['index'] = {}
-				pass
-		st.selectbox('select file', filenames, on_change=on_change, key='selected_file', label_visibility="collapsed", disabled=disabled)
-		b_delete()
-		ss['spin_select_file'] = st.empty()
+# def ui_pdf_file():
+# 	st.write('## 2. Upload or select your PDF file')
+# 	disabled = not ss.get('user') or (not ss.get('api_key') and not ss.get('community_pct',0))
+# 	t1,t2 = st.tabs(['UPLOAD','SELECT'])
+# 	with t1:
+# 		st.file_uploader('pdf file', type='pdf', key='pdf_file', disabled=disabled, on_change=index_pdf_file, label_visibility="collapsed")
+# 		b_save()
+# 	with t2:
+# 		filenames = ['']
+# 		if ss.get('storage'):
+# 			filenames += ss['storage'].list()
+# 		def on_change():
+# 			name = ss['selected_file']
+# 			if name and ss.get('storage'):
+# 				with ss['spin_select_file']:
+# 					with st.spinner('loading index'):
+# 						t0 = now()
+# 						index = ss['storage'].get(name)
+# 						ss['debug']['storage_get_time'] = now()-t0
+# 				ss['filename'] = name # XXX
+# 				ss['index'] = index
+# 				debug_index()
+# 			else:
+# 				#ss['index'] = {}
+# 				pass
+# 		st.selectbox('select file', filenames, on_change=on_change, key='selected_file', label_visibility="collapsed", disabled=disabled)
+# 		b_delete()
+# 		ss['spin_select_file'] = st.empty()
 
-def ui_show_debug():
-	st.checkbox('show debug section', key='show_debug')
+# def ui_show_debug():
+# 	st.checkbox('show debug section', key='show_debug')
 
-def ui_fix_text():
-	st.checkbox('fix common PDF problems', value=True, key='fix_text')
+# def ui_fix_text():
+# 	st.checkbox('fix common PDF problems', value=True, key='fix_text')
 
-def ui_temperature():
-	#st.slider('temperature', 0.0, 1.0, 0.0, 0.1, key='temperature', format='%0.1f')
-	ss['temperature'] = 0.0
+# def ui_temperature():
+# 	#st.slider('temperature', 0.0, 1.0, 0.0, 0.1, key='temperature', format='%0.1f')
+# 	ss['temperature'] = 0.0
 
-def ui_fragments():
-	#st.number_input('fragment size', 0,2000,200, step=100, key='frag_size')
-	st.selectbox('fragment size (characters)', [0,200,300,400,500,600,700,800,900,1000], index=3, key='frag_size')
-	b_reindex()
-	st.number_input('max fragments', 1, 10, 4, key='max_frags')
-	st.number_input('fragments before', 0, 3, 1, key='n_frag_before') # TODO: pass to model
-	st.number_input('fragments after',  0, 3, 1, key='n_frag_after')  # TODO: pass to model
+# def ui_fragments():
+# 	#st.number_input('fragment size', 0,2000,200, step=100, key='frag_size')
+# 	st.selectbox('fragment size (characters)', [0,200,300,400,500,600,700,800,900,1000], index=3, key='frag_size')
+# 	b_reindex()
+# 	st.number_input('max fragments', 1, 10, 4, key='max_frags')
+# 	st.number_input('fragments before', 0, 3, 1, key='n_frag_before') # TODO: pass to model
+# 	st.number_input('fragments after',  0, 3, 1, key='n_frag_after')  # TODO: pass to model
 
-def ui_model():
-	models = ['gpt-3.5-turbo','gpt-4','text-davinci-003','text-curie-001']
-	st.selectbox('main model', models, key='model', disabled=not ss.get('api_key'))
-	st.selectbox('embedding model', ['text-embedding-ada-002'], key='model_embed') # FOR FUTURE USE
+# def ui_model():
+# 	models = ['gpt-3.5-turbo','gpt-4','text-davinci-003','text-curie-001']
+# 	st.selectbox('main model', models, key='model', disabled=not ss.get('api_key'))
+# 	st.selectbox('embedding model', ['text-embedding-ada-002'], key='model_embed') # FOR FUTURE USE
 
-def ui_hyde():
-	st.checkbox('use HyDE', value=True, key='use_hyde')
+# def ui_hyde():
+# 	st.checkbox('use HyDE', value=True, key='use_hyde')
 
-def ui_hyde_summary():
-	st.checkbox('use summary in HyDE', value=True, key='use_hyde_summary')
+# def ui_hyde_summary():
+# 	st.checkbox('use summary in HyDE', value=True, key='use_hyde_summary')
 
-def ui_task_template():
-	st.selectbox('task prompt template', prompts.TASK.keys(), key='task_name')
+# def ui_task_template():
+# 	st.selectbox('task prompt template', prompts.TASK.keys(), key='task_name')
 
-def ui_task():
-	x = ss['task_name']
-	st.text_area('task prompt', prompts.TASK[x], key='task')
+# def ui_task():
+# 	x = ss['task_name']
+# 	st.text_area('task prompt', prompts.TASK[x], key='task')
 
-def ui_hyde_prompt():
-	st.text_area('HyDE prompt', prompts.HYDE, key='hyde_prompt')
+# def ui_hyde_prompt():
+# 	st.text_area('HyDE prompt', prompts.HYDE, key='hyde_prompt')
 
 def ui_question():
 	st.write('## 3. Ask questions'+(f' to {ss["filename"]}' if ss.get('filename') else ''))
